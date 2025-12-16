@@ -1,0 +1,391 @@
+<meta name='viewport' content='width=device-width, initial-scale=1'/><!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NOVAH IMG GEN - Shahzaib Muzaffar</title>
+    <!-- Tailwind CSS (Styling) -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        nova: {
+                            50: '#f0f9ff',
+                            100: '#e0f2fe',
+                            400: '#38bdf8',
+                            500: '#0ea5e9',
+                            600: '#0284c7',
+                            900: '#0c4a6e',
+                            950: '#082f49',
+                        }
+                    },
+                    animation: {
+                        'spin-slow': 'spin 3s linear infinite',
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        /* CRITICAL FALLBACK STYLES (Ensures app works even if Tailwind is blocked) */
+        body { margin: 0; background-color: #050505; color: #e2e8f0; font-family: sans-serif; }
+        .hidden { display: none !important; }
+        .flex { display: flex; }
+        .fixed { position: fixed; }
+        .absolute { position: absolute; }
+        .inset-0 { top: 0; right: 0; bottom: 0; left: 0; }
+        
+        /* Futuristic Fonts */
+        @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;700;900&family=Rajdhani:wght@300;400;500;600;700&display=swap');
+
+        body {
+            font-family: 'Rajdhani', sans-serif;
+            background-image: 
+                radial-gradient(circle at 50% 0%, #1a365d 0%, transparent 50%),
+                radial-gradient(circle at 0% 100%, #1e1b4b 0%, transparent 50%);
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+
+        .font-display { font-family: 'Orbitron', sans-serif; }
+
+        .glass-panel {
+            background: rgba(15, 23, 42, 0.6);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid rgba(56, 189, 248, 0.2);
+            box-shadow: 0 0 20px rgba(14, 165, 233, 0.1);
+        }
+
+        .glass-sidebar {
+            background: rgba(5, 10, 20, 0.98);
+            backdrop-filter: blur(16px);
+            border-left: 1px solid rgba(56, 189, 248, 0.3);
+            transition: transform 0.3s ease-in-out;
+        }
+
+        .nova-glow {
+            text-shadow: 0 0 10px rgba(56, 189, 248, 0.5);
+        }
+
+        .watermark-overlay {
+            position: absolute;
+            bottom: 8px; 
+            left: 8px;   
+            z-index: 10;
+            opacity: 0.7; 
+            pointer-events: none;
+            display: flex;
+            align-items: center;
+            gap: 4px; 
+            background: rgba(0, 0, 0, 0.3);
+            padding: 3px 6px; 
+            border-radius: 4px;
+            backdrop-filter: blur(2px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        button:active { transform: scale(0.95); }
+    </style>
+</head>
+<body class="flex flex-col items-center p-4 md:p-8">
+
+    <!-- Header -->
+    <header class="w-full max-w-4xl flex justify-between items-center mb-8 relative z-20">
+        <div class="flex items-center gap-3">
+            <!-- NOVA Logo -->
+            <svg class="w-10 h-10 text-nova-400 animate-spin-slow" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M50 0L61.2257 38.7743L100 50L61.2257 61.2257L50 100L38.7743 61.2257L0 50L38.7743 38.7743L50 0Z" fill="currentColor"/>
+                <circle cx="50" cy="50" r="15" fill="#0f172a" stroke="currentColor" stroke-width="2"/>
+            </svg>
+            <h1 class="text-3xl md:text-4xl font-display font-black tracking-widest text-white nova-glow">
+                NOVAH <span class="text-nova-400 font-light">GEN</span>
+            </h1>
+        </div>
+
+        <div class="flex items-center gap-4">
+            <div class="hidden md:block text-nova-400 text-sm tracking-widest border border-nova-400/30 px-3 py-1 rounded-full bg-nova-900/20">
+                SYSTEM ONLINE
+            </div>
+            <!-- Hamburger Menu Button (ID added for JS) -->
+            <button id="menuBtn" class="text-nova-400 hover:text-white transition-colors p-2 focus:outline-none bg-transparent border-0 cursor-pointer">
+                <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <line x1="3" y1="12" x2="21" y2="12"></line>
+                    <line x1="3" y1="6" x2="21" y2="6"></line>
+                    <line x1="3" y1="18" x2="21" y2="18"></line>
+                </svg>
+            </button>
+        </div>
+    </header>
+
+    <!-- Side Menu / Modal -->
+    <div id="sideMenu" class="fixed inset-0 z-50 hidden">
+        <!-- Backdrop -->
+        <div id="menuBackdrop" class="absolute inset-0 bg-black/80 backdrop-blur-sm transition-opacity cursor-pointer"></div>
+        
+        <!-- Drawer Content -->
+        <div id="menuDrawer" class="absolute top-0 right-0 w-80 h-full glass-sidebar translate-x-full shadow-2xl flex flex-col p-6 overflow-y-auto">
+            
+            <div class="flex justify-end mb-8">
+                <button id="closeMenuBtn" class="text-gray-400 hover:text-white transition-colors cursor-pointer p-2">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+                </button>
+            </div>
+
+            <!-- Profile Section -->
+            <div class="flex flex-col items-center mb-8 text-center">
+                <div class="w-24 h-24 rounded-full bg-gradient-to-br from-nova-400 to-nova-900 p-[2px] mb-4">
+                    <div class="w-full h-full rounded-full bg-black flex items-center justify-center overflow-hidden">
+                        <svg class="w-12 h-12 text-nova-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                            <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+                            <circle cx="12" cy="7" r="4"></circle>
+                        </svg>
+                    </div>
+                </div>
+                <h2 class="text-2xl font-display font-bold text-white mb-1">Shahzaib Muzaffar</h2>
+                <span class="px-3 py-1 bg-nova-900/40 border border-nova-500/30 rounded-full text-nova-400 text-xs tracking-wider uppercase">Lead Developer</span>
+            </div>
+
+            <!-- Bio -->
+            <div class="space-y-6 flex-grow">
+                <div>
+                    <h3 class="text-nova-400 font-display text-sm tracking-widest mb-3 border-b border-nova-500/20 pb-1">ABOUT THE CREATOR</h3>
+                    <p class="text-gray-300 text-sm leading-relaxed font-light">
+                        Highly skilled Web Developer and AI Coder specializing in next-generation user interfaces and generative artificial intelligence integration. Dedicated to pushing the boundaries of what's possible on the web with clean, efficient, and futuristic code.
+                    </p>
+                </div>
+
+                <div>
+                    <h3 class="text-nova-400 font-display text-sm tracking-widest mb-3 border-b border-nova-500/20 pb-1">SKILL MATRIX</h3>
+                    <ul class="text-gray-400 text-sm space-y-2">
+                        <li class="flex items-center gap-2"><div class="w-1.5 h-1.5 bg-nova-500 rounded-full"></div>Full Stack Development</li>
+                        <li class="flex items-center gap-2"><div class="w-1.5 h-1.5 bg-nova-500 rounded-full"></div>AI Model Integration</li>
+                        <li class="flex items-center gap-2"><div class="w-1.5 h-1.5 bg-nova-500 rounded-full"></div>Responsive UI/UX Design</li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- Contact -->
+            <div class="mt-8 pt-6 border-t border-nova-500/20">
+                <a href="https://instagram.com/shahzaib_muzaffar_7" target="_blank" class="flex items-center justify-center gap-3 w-full bg-gradient-to-r from-purple-900/50 to-pink-900/50 hover:from-purple-800/50 hover:to-pink-800/50 border border-purple-500/30 p-3 rounded-lg text-white transition-all group">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="group-hover:text-pink-400 transition-colors"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line></svg>
+                    <span class="font-display tracking-wide text-sm">@shahzaib_muzaffar_7</span>
+                </a>
+                <p class="text-center text-xs text-gray-600 mt-4">NOVAH SYSTEMS © 2024</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Main Interface -->
+    <main class="w-full max-w-4xl glass-panel rounded-2xl p-6 md:p-8 relative overflow-hidden group">
+        
+        <!-- Decoration Lines -->
+        <div class="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-transparent via-nova-400 to-transparent opacity-50"></div>
+        <div class="absolute bottom-0 left-0 w-full h-1 bg-gradient-to-r from-transparent via-nova-400 to-transparent opacity-50"></div>
+
+        <!-- Input Section -->
+        <div class="flex flex-col md:flex-row gap-4 mb-8">
+            <div class="relative flex-grow">
+                <input 
+                    type="text" 
+                    id="promptInput" 
+                    placeholder="Describe your vision (e.g., 'Cyberpunk city')..." 
+                    class="w-full bg-nova-950/50 text-white border border-nova-500/30 rounded-lg px-4 py-4 focus:outline-none focus:border-nova-400 focus:ring-1 focus:ring-nova-400 transition-all placeholder-gray-500 font-medium"
+                >
+            </div>
+            
+            <button 
+                id="genBtn"
+                class="bg-nova-600 hover:bg-nova-500 text-white font-display font-bold tracking-wider px-8 py-4 rounded-lg transition-all transform hover:scale-105 active:scale-95 flex items-center justify-center gap-2 whitespace-nowrap cursor-pointer"
+            >
+                <span id="btnText">INITIALIZE</span>
+                <svg id="btnIcon" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v18"/><path d="M3 12h18"/><path d="m19 9 3 3-3 3"/><path d="m5 15-3-3 3-3"/></svg>
+            </button>
+        </div>
+
+        <!-- Image Display Area -->
+        <div class="relative w-full aspect-square md:aspect-video bg-black/40 rounded-xl border border-dashed border-nova-500/30 flex items-center justify-center overflow-hidden" id="imageContainer">
+            
+            <!-- Placeholder State -->
+            <div id="placeholder" class="text-center p-6 flex flex-col items-center">
+                <div class="w-16 h-16 border-2 border-nova-500/30 rounded-full flex items-center justify-center mb-4 text-nova-500/50">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="18" height="18" x="3" y="3" rx="2" ry="2"/><circle cx="9" cy="9" r="2"/><path d="m21 15-3.086-3.086a2 2 0 0 0-2.828 0L6 21"/></svg>
+                </div>
+                <p class="text-gray-400 text-lg">Awaiting Input Data...</p>
+                <p class="text-gray-600 text-sm mt-2">Enter a prompt above to render.</p>
+            </div>
+
+            <!-- Loading State -->
+            <div id="loader" class="hidden absolute inset-0 bg-black/80 flex flex-col items-center justify-center z-20 backdrop-blur-sm">
+                <div class="relative w-24 h-24">
+                    <div class="absolute inset-0 border-4 border-nova-900 rounded-full"></div>
+                    <div class="absolute inset-0 border-4 border-t-nova-400 border-r-transparent border-b-transparent border-l-transparent rounded-full animate-spin"></div>
+                </div>
+                <p class="mt-4 text-nova-400 font-display tracking-widest animate-pulse">RENDERING...</p>
+            </div>
+
+            <!-- Result Image -->
+            <img id="resultImage" class="w-full h-full object-contain hidden transition-opacity duration-500" alt="Generated content" />
+
+            <!-- NOVA Watermark (Small & Subtle) -->
+            <div id="watermark" class="hidden watermark-overlay">
+                <!-- Simple Abstract Nova Symbol -->
+                <svg width="12" height="12" viewBox="0 0 50 50" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M25 0L30 20L50 25L30 30L25 50L20 30L0 25L20 20L25 0Z" fill="#38bdf8"/>
+                </svg>
+                <span class="text-white font-display font-bold text-[10px] tracking-wider">NOVAH</span>
+            </div>
+
+            <!-- Action Bar (Appears on Hover/Success) -->
+            <div id="actionBar" class="absolute top-4 right-4 flex gap-2 opacity-0 transition-opacity duration-300 pointer-events-none">
+                <button id="downloadBtn" class="bg-black/60 hover:bg-nova-600 text-white p-2 rounded-lg backdrop-blur-md border border-white/10 transition-colors pointer-events-auto" title="Download Image">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" x2="12" y1="15" y2="3"/></svg>
+                </button>
+            </div>
+        </div>
+
+        <!-- Footer Info -->
+        <div class="mt-6 flex justify-between items-center text-xs text-gray-600 border-t border-nova-900/50 pt-4">
+            <p>Powered by Shahzaib Muzaffar (Nova) • No Key Required (free) </p>
+            <p class="font-mono text-nova-500">V.1.0.5 (Stable)</p>
+        </div>
+
+    </main>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            // --- Elements ---
+            const els = {
+                promptInput: document.getElementById('promptInput'),
+                genBtn: document.getElementById('genBtn'),
+                resultImage: document.getElementById('resultImage'),
+                loader: document.getElementById('loader'),
+                placeholder: document.getElementById('placeholder'),
+                watermark: document.getElementById('watermark'),
+                actionBar: document.getElementById('actionBar'),
+                imageContainer: document.getElementById('imageContainer'),
+                sideMenu: document.getElementById('sideMenu'),
+                menuDrawer: document.getElementById('menuDrawer'),
+                menuBtn: document.getElementById('menuBtn'),
+                closeMenuBtn: document.getElementById('closeMenuBtn'),
+                menuBackdrop: document.getElementById('menuBackdrop'),
+                downloadBtn: document.getElementById('downloadBtn')
+            };
+
+            let currentImageUrl = '';
+
+            // --- Menu Logic ---
+            function openMenu() {
+                els.sideMenu.classList.remove('hidden');
+                // Force reflow for transition
+                void els.sideMenu.offsetWidth; 
+                els.menuDrawer.classList.remove('translate-x-full');
+            }
+
+            function closeMenu() {
+                els.menuDrawer.classList.add('translate-x-full');
+                setTimeout(() => {
+                    els.sideMenu.classList.add('hidden');
+                }, 300);
+            }
+
+            // Attach Menu Listeners
+            els.menuBtn.addEventListener('click', openMenu);
+            els.closeMenuBtn.addEventListener('click', closeMenu);
+            els.menuBackdrop.addEventListener('click', closeMenu);
+
+            // --- Generation Logic ---
+            async function generateImage() {
+                const prompt = els.promptInput.value.trim();
+                
+                if (!prompt) {
+                    alert('Please enter a description for your image.');
+                    return;
+                }
+
+                startLoading();
+                
+                const seed = Math.floor(Math.random() * 1000000);
+                const apiUrl = `https://image.pollinations.ai/prompt/${encodeURIComponent(prompt)}?width=1024&height=1024&seed=${seed}&nologo=true`;
+
+                try {
+                    const response = await fetch(apiUrl);
+                    if (!response.ok) throw new Error('Network error');
+                    
+                    const blob = await response.blob();
+                    currentImageUrl = URL.createObjectURL(blob);
+                    
+                    els.resultImage.onload = () => {
+                        stopLoading();
+                        showResult();
+                    };
+                    els.resultImage.onerror = () => {
+                        handleError();
+                    };
+                    els.resultImage.src = currentImageUrl;
+
+                } catch (error) {
+                    console.error(error);
+                    handleError();
+                }
+            }
+
+            function startLoading() {
+                els.genBtn.disabled = true;
+                els.genBtn.style.opacity = '0.5';
+                els.placeholder.classList.add('hidden');
+                els.resultImage.classList.add('hidden');
+                els.watermark.classList.add('hidden');
+                els.actionBar.style.opacity = '0';
+                els.loader.classList.remove('hidden');
+            }
+
+            function stopLoading() {
+                els.loader.classList.add('hidden');
+                els.genBtn.disabled = false;
+                els.genBtn.style.opacity = '1';
+            }
+
+            function showResult() {
+                els.resultImage.classList.remove('hidden');
+                els.watermark.classList.remove('hidden');
+                els.actionBar.style.opacity = '1';
+            }
+
+            function handleError() {
+                stopLoading();
+                els.placeholder.classList.remove('hidden');
+                alert("Generation failed. Please try again.");
+            }
+
+            // --- Download Logic ---
+            els.downloadBtn.addEventListener('click', () => {
+                if (!currentImageUrl) return;
+                const link = document.createElement('a');
+                link.href = currentImageUrl;
+                link.download = `novah_${new Date().getTime()}.jpg`;
+                document.body.appendChild(link);
+                link.click();
+                document.body.removeChild(link);
+            });
+
+            // --- Input Listeners ---
+            els.genBtn.addEventListener('click', generateImage);
+            els.promptInput.addEventListener('keydown', (e) => {
+                if (e.key === 'Enter') generateImage();
+            });
+            
+            // Hover effect for action bar
+            els.imageContainer.addEventListener('mouseenter', () => {
+                 if (!els.resultImage.classList.contains('hidden')) {
+                     els.actionBar.style.opacity = '1';
+                 }
+            });
+
+        });
+    </script>
+</body>
+</html>
+
